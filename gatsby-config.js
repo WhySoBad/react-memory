@@ -1,10 +1,37 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `memory.js`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    author: `WhySoBad`,
   },
   plugins: [
+    {
+      resolve: "gatsby-plugin-sass",
+      options: {
+        implementation: require("sass"),
+        cssLoaderOptions: {
+          camelCase: false,
+        },
+      },
+    },
+    {
+      resolve: "gatsby-plugin-svgr",
+      options: {
+        svgoConfig: {
+          plugins: [
+            { prefixIds: false },
+            {
+              cleanupIDs: {
+                remove: true,
+                force: true,
+              },
+            },
+            { inlineStyles: false },
+            { removeStyleElement: true },
+          ],
+        },
+      },
+    },
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,

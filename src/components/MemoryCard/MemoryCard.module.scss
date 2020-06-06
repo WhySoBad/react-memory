@@ -1,0 +1,35 @@
+@use '../../styles/config/' as *;
+
+.square {
+  position: relative;
+  width: 100%;
+  padding: 1%;
+  background-color: transparent;
+}
+
+.square::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.card,
+.card:active {
+  margin: 1.5%;
+  position: absolute;
+  font-weight: $fw-bold;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.35);
+  align-items: center;
+  justify-content: center;
+  transition: background-color ease-out 0.5s;
+  //transition: background ease-in 0.35s;
+}
+
+.card:hover {
+  background-color: rgba(0, 0, 0, 0.55);
+}

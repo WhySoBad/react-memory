@@ -1,0 +1,90 @@
+@use './config' as *;
+
+html {
+  box-sizing: border-box;
+  touch-action: manipulation;
+  cursor: default;
+}
+
+body {
+  background-color: $white;
+  font-family: $ff-main;
+  font-weight: $fw-regular;
+  font-size: 16px;
+  line-height: $lh-regular;
+  height: 100%;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+img,
+svg,
+textarea {
+  vertical-align: top;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  appearance: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:focus {
+  outline: none;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}

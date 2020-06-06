@@ -1,0 +1,139 @@
+@use '../../styles/config/' as *;
+
+.container {
+  flex: 8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(
+    to right top,
+    rgb(25, 5, 55),
+    rgb(94, 7, 75),
+    rgb(160, 23, 75),
+    #d24739,
+    #eb8312
+  );
+  overflow: hidden;
+}
+
+.undercontainer {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  display: flex;
+}
+
+.center.side {
+  flex: 1;
+  margin: 1rem;
+}
+
+.center.middle {
+  width: auto;
+  flex: 1.5;
+  margin: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  font-weight: $fw-bold;
+  background-color: $gray-1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.underbox {
+  height: 6rem;
+  padding: 0 1rem;
+  margin: 0.5 1.5rem;
+}
+
+.top {
+  flex: 1;
+  display: flex;
+  color: $white;
+  justify-content: center;
+  align-items: center;
+}
+
+.left.head {
+  text-align: left;
+  flex: 1;
+}
+.middle.head {
+  text-align: center;
+  font-size: $fs-5;
+  flex: 3;
+}
+.right.head {
+  text-align: right;
+  flex: 1;
+}
+
+.bottom {
+  flex: 1;
+  color: $white;
+  bottom: 0;
+  //position: absolute;
+  width: 100%;
+}
+
+.board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+@media only screen and (min-width: $res-xxs) {
+  .center.side {
+    flex: 0;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (min-width: $res-xs) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: $res-s) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: $res-m) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: $res-l) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: $res-xl) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
+
+@media only screen and (max-width: $res-xxl) {
+  .center.side {
+    flex: 0.45;
+    margin: 1.2rem;
+  }
+}
