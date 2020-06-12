@@ -38,6 +38,7 @@ export default function MemoryBoard(props) {
       if (Object.keys(currentColor[0]).length !== size) {
         sizeChange();
         resetCards();
+        data.solvedPairs = 0;
         currentColor.shift();
         newColors(size);
       }
