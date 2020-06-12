@@ -14,7 +14,6 @@ export default function MemoryCard(props) {
             ? {
                 background: background,
                 opacity: "1",
-                //backgroundColor: background,
               }
             : {}
         }

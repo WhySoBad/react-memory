@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "@react-hook/media-query";
-import useResizeAware from "react-resize-aware";
+import { ResizeListener } from "react-resize-listener";
+//import useResizeAware from "react-resize-aware";
 import cx from "classnames";
 import data from "../../data/website";
 import style from "./MainScreen.module.scss";
@@ -9,9 +10,10 @@ import MemoryBoard from "../MemoryBoard";
 export default function MainScreen(props) {
   const { children } = props;
   const ref = useRef(null);
-  const [resizeListener, sizes] = useResizeAware();
   const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
   const [clicks, setClicks] = useState(data.clicks);
+  const [solved, setSolved] = useState(data.solvedPairs);
+  const [allPairs, setAllPairs] = useState(data.allPairs);
   const queries = {
     xxs: useMediaQuery(`only screen and (min-width: ${data.res.xxs.px})`),
     xs: useMediaQuery(`only screen and (min-width: ${data.res.xs.px})`),
@@ -27,10 +29,12 @@ export default function MainScreen(props) {
       width: ref.current ? ref.current.offsetWidth : 0,
       height: ref.current ? ref.current.offsetHeight : 0,
     });
-  }, [ref.current, sizes]);
+  }, [ref.current]);
 
   useEffect(() => {
     setClicks(data.clicks);
+    setSolved(data.solvedPairs);
+    setAllPairs(data.allPairs);
   }, queries);
 
   const getFields = () => {
@@ -47,13 +51,37 @@ export default function MainScreen(props) {
     return resolution;
   };
 
+  let statistics =
+    data.res[getFields()].prio > 0 ? (
+      <div className={style.stats}>
+        <div className={cx(style["stats-container"])}>
+          Solved:
+          <span className={style.number}>
+            {solved}/
+            {allPairs === 0 ? data.res[getFields()].fields / 2 : allPairs}
+          </span>
+        </div>
+        <div className={cx(style["stats-container"])}>
+          Clicks: <span className={style.number}> {clicks}</span>
+        </div>
+      </div>
+    ) : (
+      <></>
+    );
+
   return (
     <>
       <div className={style.box}>
+        <ResizeListener
+          onResize={() =>
+            setDimensions({
+              width: ref.current ? ref.current.offsetWidth : 0,
+              height: ref.current ? ref.current.offsetHeight : 0,
+            })
+          }
+        />
         <header className={cx(style.top, style.underbox)}>
-          <div className={cx(style.left, style.head)}>
-            BUTTONS Clicks: {clicks}
-          </div>
+          <div className={cx(style.left, style.head)}>{statistics}</div>
           <div className={cx(style.middle, style.head)}>Memory</div>
           <div className={cx(style.right, style.head)}>SOCIAL</div>
         </header>
@@ -61,11 +89,17 @@ export default function MainScreen(props) {
           <div className={style.undercontainer}>
             <main className={cx(style.middle, style.center)}>
               <div className={style.board} ref={ref}>
-                {resizeListener}
                 <MemoryBoard
-                  boxHeight={dimensions.height}
-                  boxWidth={dimensions.width}
-                  onClick={() => setClicks(data.clicks)}
+                  dimensions={{
+                    width: dimensions.width,
+                    height: dimensions.height,
+                  }}
+                  resolution={data.res[getFields()].type}
+                  onClick={() => {
+                    setClicks(data.clicks);
+                    setSolved(data.solvedPairs);
+                    setAllPairs(data.allPairs);
+                  }}
                   size={data.res[getFields()].fields}
                   horizontal={data.res[getFields()].horizontal}
                 >

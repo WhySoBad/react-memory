@@ -19,8 +19,8 @@ export default function MemoryBoard(props) {
     className,
     size,
     horizontal,
-    boxHeight,
-    boxWidth,
+    dimensions,
+    resolution,
     ...rest
   } = props;
   size = size == null ? 36 : size;
@@ -28,17 +28,14 @@ export default function MemoryBoard(props) {
   for (let i = 0; i < size; i++) {
     sections[i] = i;
   }
-  console.log(boxHeight, boxWidth);
 
   useEffect(() => {
-    setDim({ height: boxHeight, width: boxWidth });
-    console.log(dim);
-  }, [boxWidth, boxHeight]);
+    setDim({ height: dimensions.height, width: dimensions.width });
+  }, [dimensions]);
 
   useEffect(() => {
     if (currentColor[0]) {
       if (Object.keys(currentColor[0]).length !== size) {
-        console.log("New size");
         sizeChange();
         resetCards();
         currentColor.shift();
@@ -97,7 +94,7 @@ export default function MemoryBoard(props) {
     await delay(650);
     currentColor[0][firstId].isFlipped = false;
     setRender(1);
-    //await delay(100);
+    //await delay(500);
     const secondId = secondCard.id;
     currentColor[0][secondId].isFlipped = false;
     setRender(2);
@@ -127,7 +124,6 @@ export default function MemoryBoard(props) {
     if (!card.canFlip) return;
     if (firstCard && firstCard.id === card.id) return;
     if (secondCard && secondCard.id === card.id) return;
-    //console.log(currentColor[0]);
     data.clicks++;
     card.isFlipped = true;
     firstCard ? setSecondCard(card) : setFirstCard(card);
@@ -162,7 +158,7 @@ export default function MemoryBoard(props) {
       let finishColor = `rgb(${currColor[2][0]}, ${currColor[2][1]}, ${currColor[2][2]})`;
 
       gradient.push(
-        `linear-gradient(to right top, ${startColor}, ${middleColor1}, ${middleColor},${middleColor2}, ${finishColor})`
+        `linear-gradient(to right top, ${startColor}, ${finishColor})`
       );
     });
 
@@ -213,13 +209,34 @@ export default function MemoryBoard(props) {
     }
   };
 
+  const hasDecimal = number => {
+    return number % 1 !== 0;
+  };
+
+  const isSmall = () => {
+    if (resolution === "xs" || resolution === "xxs") return true;
+    return false;
+  };
+
   let boardStyle = {
     gridTemplateColumns: `repeat(${horizontal}, calc(100% /${horizontal}))`,
     gridTemplateRows: `repeat(${size / horizontal}, calc(100% /${
-      size / horizontal
+      isSmall() ? size / horizontal : horizontal
     }))`,
-    height: dim.width > dim.height ? dim.height : dim.width,
-    width: dim.width > dim.height ? dim.height : dim.width,
+    height: !isSmall()
+      ? dim.width > dim.height
+        ? dim.height
+        : dim.width
+      : dim.width > dim.height
+      ? dim.width
+      : dim.height,
+    width: !isSmall()
+      ? dim.width > dim.height
+        ? dim.height
+        : dim.width
+      : dim.width > dim.height
+      ? dim.width
+      : dim.height,
   };
 
   return (
