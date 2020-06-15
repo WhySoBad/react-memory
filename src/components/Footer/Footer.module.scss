@@ -1,0 +1,28 @@
+@use '../../styles/config/' as *;
+
+.footer {
+  box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 10px 2px;
+  width: 100%;
+}
+
+.footer-container {
+  padding: 1rem;
+  color: $white;
+  bottom: 0;
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  letter-spacing: 0.05rem;
+}
+
+.copyright-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.copyright-text {
+  font-weight: $fw-regular;
+  font-size: 0.9rem;
+}

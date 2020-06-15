@@ -1,0 +1,43 @@
+@use '../../styles/config/' as *;
+
+.header {
+  box-shadow: rgba(0, 0, 0, 0.6) 0px 0px 10px 2px;
+  width: 100%;
+  z-index: 1;
+}
+
+.header-container {
+  padding: 1.5rem;
+  color: $white;
+  bottom: 0;
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  letter-spacing: 0.05rem;
+}
+
+.left {
+  color: $white;
+}
+
+.middle {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+}
+
+.right {
+  color: $gray-1;
+}
+
+.icon {
+  fill: $white;
+}
+
+.github:hover {
+  filter: drop-shadow(0 0 1rem #fdfdfd);
+}

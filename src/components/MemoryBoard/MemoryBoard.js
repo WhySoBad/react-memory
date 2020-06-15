@@ -215,7 +215,8 @@ export default function MemoryBoard(props) {
   };
 
   const isSmall = () => {
-    if (resolution === "xs" || resolution === "xxs") return true;
+    if (resolution === "xs" || resolution === "xxs" || resolution === "s")
+      return true;
     return false;
   };
 
@@ -224,7 +225,8 @@ export default function MemoryBoard(props) {
     gridTemplateRows: `repeat(${size / horizontal}, calc(100% /${
       isSmall() ? size / horizontal : horizontal
     }))`,
-    height: !isSmall()
+    height: "fit-content",
+    maxHeight: !isSmall()
       ? dim.width > dim.height
         ? dim.height
         : dim.width
@@ -247,6 +249,7 @@ export default function MemoryBoard(props) {
           <MemoryCard
             key={key}
             position={key}
+            flipped={getFlipped(key)}
             background={getFlipped(key) ? getBackgroundColor(key) : null}
             onClick={() => cardClick(key)}
             size={size}

@@ -1,0 +1,13 @@
+<svg width="700" height="700" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="700" height="700" fill="#E5E5E5"/>
+<rect id="Rectangle 1" width="700" height="700" fill="white"/>
+<rect id="Rectangle 2" x="25" y="25" width="200" height="200" fill="black" fill-opacity="0.67"/>
+<rect id="Rectangle 5" x="25" y="250" width="200" height="200" fill="#E33636"/>
+<rect id="Rectangle 8" x="25" y="475" width="200" height="200" fill="black" fill-opacity="0.67"/>
+<rect id="Rectangle 3" x="475" y="25" width="200" height="200" fill="black" fill-opacity="0.67"/>
+<rect id="Rectangle 6" x="475" y="250" width="200" height="200" fill="black" fill-opacity="0.67"/>
+<rect id="Rectangle 9" x="475" y="475" width="200" height="200" fill="#E33636"/>
+<rect id="Rectangle 4" x="250" y="25" width="200" height="200" fill="#3397B7"/>
+<rect id="Rectangle 7" x="250" y="250" width="200" height="200" fill="black" fill-opacity="0.67"/>
+<rect id="Rectangle 10" x="250" y="475" width="200" height="200" fill="black" fill-opacity="0.67"/>
+</svg>

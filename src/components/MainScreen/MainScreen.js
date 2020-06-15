@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "@react-hook/media-query";
 import { ResizeListener } from "react-resize-listener";
-//import useResizeAware from "react-resize-aware";
 import cx from "classnames";
 import data from "../../data/website";
 import style from "./MainScreen.module.scss";
 import MemoryBoard from "../MemoryBoard";
+import Footer from "../Footer";
+import Header from "../Header";
 
 export default function MainScreen(props) {
   const { children } = props;
@@ -51,43 +52,47 @@ export default function MainScreen(props) {
     return resolution;
   };
 
-  let statistics =
-    data.res[getFields()].prio > 0 ? (
-      <div className={style.stats}>
-        <div className={cx(style["stats-container"])}>
-          Solved:
-          <span className={style.number}>
-            {solved}/
-            {allPairs === 0 ? data.res[getFields()].fields / 2 : allPairs}
-          </span>
-        </div>
-        <div className={cx(style["stats-container"])}>
-          Clicks: <span className={style.number}> {clicks}</span>
-        </div>
-      </div>
-    ) : (
-      <></>
-    );
-
   return (
     <>
       <div className={style.box}>
         <ResizeListener
-          onResize={() =>
+          onResize={() => {
             setDimensions({
               width: ref.current ? ref.current.offsetWidth : 0,
               height: ref.current ? ref.current.offsetHeight : 0,
-            })
-          }
+            });
+            console.log(dimensions);
+          }}
         />
-        <header className={cx(style.top, style.underbox)}>
-          <div className={cx(style.left, style.head)}>{statistics}</div>
-          <div className={cx(style.middle, style.head)}>Memory</div>
-          <div className={cx(style.right, style.head)}>SOCIAL</div>
-        </header>
+        <Header />
         <section className={style.container}>
           <div className={style.undercontainer}>
-            <main className={cx(style.middle, style.center)}>
+            <div className={style["stats-container"]}>
+              <div className={style.stats}>
+                {clicks >= 10
+                  ? clicks >= 100
+                    ? clicks
+                    : "0" + clicks
+                  : "00" + clicks}
+              </div>
+
+              <div className={style.stats}>
+                {solved}/
+                {allPairs === 0 ? data.res[getFields()].fields / 2 : allPairs}
+              </div>
+
+              <div className={style.stats}>
+                {data.res[getFields()].fields /
+                  data.res[getFields()].horizontal}
+                x{data.res[getFields()].horizontal}
+              </div>
+            </div>
+            <main
+              className={cx(style.middle, style.center)}
+              style={
+                data.res[getFields()].prio <= 1 ? { overflowY: "scroll" } : {}
+              }
+            >
               <div className={style.board} ref={ref}>
                 <MemoryBoard
                   dimensions={{
@@ -109,7 +114,7 @@ export default function MainScreen(props) {
             </main>
           </div>
         </section>
-        <footer className={cx(style.bottom, style.underbox)}></footer>
+        <Footer />
       </div>
     </>
   );

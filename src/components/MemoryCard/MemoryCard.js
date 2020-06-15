@@ -3,7 +3,7 @@ import cx from "classnames";
 import style from "./MemoryCard.module.scss";
 
 export default function MemoryCard(props) {
-  const { children, className, background, position, ...rest } = props;
+  const { children, flipped, className, background, position, ...rest } = props;
 
   return (
     <div className={style.square}>
@@ -12,7 +12,7 @@ export default function MemoryCard(props) {
         style={
           background
             ? {
-                background: background,
+                backgroundColor: background,
                 opacity: "1",
               }
             : {}
