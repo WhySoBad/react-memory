@@ -9,3 +9,27 @@
   padding: 0.5rem;
   grid-auto-flow: column dense;
 }
+
+.win-container {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100%;
+  color: $white;
+  padding: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.win-header {
+  font-size: $fs-9;
+  font-weight: $fw-bold;
+  padding: 2rem;
+}
+
+.win-text {
+  padding: 1rem 0;
+  background: rgba(0, 0, 0, 0.3);
+  width: 80%;
+  flex: 1 1 auto;
+}

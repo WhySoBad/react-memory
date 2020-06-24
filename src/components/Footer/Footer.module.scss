@@ -11,18 +11,44 @@
   bottom: 0;
   height: fit-content;
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   letter-spacing: 0.05rem;
 }
 
 .copyright-container {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.copyright {
+  margin-left: 0.75rem;
 }
 
 .copyright-text {
   font-weight: $fw-regular;
   font-size: 0.9rem;
+}
+
+.horizontal {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  flex: 1 1 auto;
+  width: 100%;
+}
+.logo-container {
+  //display: flex;
+  width: 4rem;
+}
+.logo {
+  /*display: inline-flex;
+  justify-content: center;
+  align-items: center;*/
+  fill: $white;
+  height: 100%; //3.8rem;
+  width: 100%; //3.8rem;
+  padding: 0.4rem;
+  margin-right: 0.75rem;
+  border-right: solid 1px;
 }

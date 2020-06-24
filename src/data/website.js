@@ -24,4 +24,5 @@ module.exports = {
   clicks: 0,
   solvedPairs: 0,
   allPairs: 0,
+  won: false,
 };

@@ -18,7 +18,7 @@ export default function MemoryCard(props) {
             : {}
         }
         {...rest}
-      />
+      ></div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ const Header = props => {
         <div className={style.left}></div>
         <div className={style.middle}>Memory</div>
         <div className={style.right}>
-          <a href={data.social.github.link} target="_blank">
+          <a href={data.social.github.link} target="_blank" rel="noreferrer">
             <Icon className={cx(style.icon, style.github)} name={"github"} />
           </a>
         </div>

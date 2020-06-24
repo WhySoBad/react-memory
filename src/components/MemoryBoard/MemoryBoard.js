@@ -58,8 +58,11 @@ export default function MemoryBoard(props) {
     if (cardFields === solvedFields) finalWin();
   }, [firstCard, secondCard]);
 
-  const finalWin = () => {
+  const finalWin = async () => {
     console.log("won");
+    await delay(250);
+    setRender(7);
+    data.won = true;
   };
 
   const win = () => {
@@ -111,6 +114,7 @@ export default function MemoryBoard(props) {
       currentColor[0][secondCard.id].isFlipped = false;
     }
     data.clicks = 0;
+    data.win = false;
   };
 
   const resetCards = () => {
@@ -121,6 +125,7 @@ export default function MemoryBoard(props) {
   const cardClick = position => {
     if (currentColor[0] == null) newColors(size);
     let card = currentColor[0][position];
+    //console.log(currentColor[0]); //debug only [see card data]
     if (card.isFlipped) return;
     if (!card.canFlip) return;
     if (firstCard && firstCard.id === card.id) return;
@@ -149,13 +154,6 @@ export default function MemoryBoard(props) {
     colors.forEach((color, index) => {
       let currColor = [...colors[index]];
       let startColor = `rgb(${currColor[0][0]}, ${currColor[0][1]}, ${currColor[0][2]})`;
-      let middleColor1 = `rgb(${currColor[0][0] + 30}, ${
-        currColor[0][1] + 30
-      }, ${currColor[0][2] + 30})`;
-      let middleColor = `rgb(${currColor[1][0]}, ${currColor[1][1]}, ${currColor[1][2]})`;
-      let middleColor2 = `rgb(${currColor[2][0] + 30}, ${
-        currColor[2][1] + 30
-      }, ${currColor[2][2] + 30})`;
       let finishColor = `rgb(${currColor[2][0]}, ${currColor[2][1]}, ${currColor[2][2]})`;
 
       gradient.push(
@@ -174,6 +172,7 @@ export default function MemoryBoard(props) {
     singleColor.forEach((value, index) => {
       fieldColors[fields[(index + 1) * 2 - 1]] = {
         color: value,
+        colorId: index,
         id: fields[(index + 1) * 2 - 1],
         isSolved: false,
         isFlipped: false,
@@ -181,6 +180,7 @@ export default function MemoryBoard(props) {
       };
       fieldColors[fields[(index + 1) * 2 - 2]] = {
         color: value,
+        colorId: index,
         id: fields[(index + 1) * 2 - 2],
         isSolved: false,
         isFlipped: false,
@@ -198,6 +198,14 @@ export default function MemoryBoard(props) {
     return false;
   };
 
+  const getId = key => {
+    if (currentColor[0] != null) {
+      return currentColor[0][key].colorId ? currentColor[0][key].colorId : -1;
+    } else {
+      return -1;
+    }
+  };
+
   const getBackgroundColor = position => {
     if (currentColor[0] != null) {
       if (currentColor[0][position].isFlipped) {
@@ -210,23 +218,14 @@ export default function MemoryBoard(props) {
     }
   };
 
-  const hasDecimal = number => {
-    return number % 1 !== 0;
-  };
-
   const isSmall = () => {
     if (resolution === "xs" || resolution === "xxs" || resolution === "s")
       return true;
     return false;
   };
 
-  let boardStyle = {
-    gridTemplateColumns: `repeat(${horizontal}, calc(100% /${horizontal}))`,
-    gridTemplateRows: `repeat(${size / horizontal}, calc(100% /${
-      isSmall() ? size / horizontal : horizontal
-    }))`,
-    height: "fit-content",
-    maxHeight: !isSmall()
+  let boardDims = {
+    height: !isSmall()
       ? dim.width > dim.height
         ? dim.height
         : dim.width
@@ -242,21 +241,37 @@ export default function MemoryBoard(props) {
       : dim.height,
   };
 
+  let boardGrid = {
+    gridTemplateColumns: `repeat(${horizontal}, calc(100% /${horizontal}))`,
+    gridTemplateRows: `repeat(${size / horizontal}, calc(100% /${
+      isSmall() ? size / horizontal : horizontal
+    }))`,
+  };
+
   return (
     <>
-      <div className={cx(style.wrapper)} style={boardStyle} {...rest}>
-        {sections.map(key => (
-          <MemoryCard
-            key={key}
-            position={key}
-            flipped={getFlipped(key)}
-            background={getFlipped(key) ? getBackgroundColor(key) : null}
-            onClick={() => cardClick(key)}
-            size={size}
-          >
-            {children}
-          </MemoryCard>
-        ))}
+      <div style={boardDims}>
+        {!data.won ? (
+          <div className={cx(style.wrapper)} style={boardGrid} {...rest}>
+            {sections.map(key => (
+              <MemoryCard
+                key={key}
+                position={key}
+                flipped={getFlipped(key)}
+                background={getFlipped(key) ? getBackgroundColor(key) : null}
+                onClick={() => cardClick(key)}
+                size={size}
+              >
+                {children}
+              </MemoryCard>
+            ))}
+          </div>
+        ) : (
+          <div className={style["win-container"]}>
+            <div className={style["win-header"]}>You won! 🎉</div>
+            <div className={style["win-text"]}>asdf</div>
+          </div>
+        )}
       </div>
     </>
   );
