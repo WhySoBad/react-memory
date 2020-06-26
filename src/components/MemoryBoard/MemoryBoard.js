@@ -1,36 +1,55 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { rgb } from "random-color-gen";
 import cx from "classnames";
 import rc from "randomcolor";
+import { ResizeListener } from "react-resize-listener";
 import data, { currentColor } from "../../data/website";
 import style from "./MemoryBoard.module.scss";
 import MemoryCard from "../MemoryCard";
+import Statistics from "../Statistics";
 
 export default function MemoryBoard(props) {
   const [, setRender] = useState(null);
-  const [dim, setDim] = useState({
-    height: 0,
-    width: 0,
+  const [clicks, setClicks] = useState(data.clicks);
+  const [solved, setSolved] = useState(data.solvedPairs);
+  const [allPairs, setAllPairs] = useState(data.allPairs);
+  const ref = useRef(null);
+  const [rep, setRep] = useState({
+    hor: 0,
+    ver: 0,
+  });
+  const [dimensions, setDimensions] = useState({
+    width: ref.current ? ref.current.offsetWidth : 0,
+    height: ref.current ? ref.current.offsetHeight : 0,
   });
   const [firstCard, setFirstCard] = useState(null);
   const [secondCard, setSecondCard] = useState(null);
-  let {
-    children,
-    className,
-    size,
-    horizontal,
-    dimensions,
-    resolution,
-    ...rest
-  } = props;
-  size = size == null ? 36 : size;
+  let { children, className, horizontal, resolution, ...rest } = props;
+  let size = rep.hor * rep.ver;
   let sections = [];
   for (let i = 0; i < size; i++) {
     sections[i] = i;
   }
 
   useEffect(() => {
-    setDim({ height: dimensions.height, width: dimensions.width });
+    setDimensions({
+      width: ref.current ? ref.current.offsetWidth : 0,
+      height: ref.current ? ref.current.offsetHeight : 0,
+    });
+  }, [ref.current]);
+
+  useEffect(() => {
+    setRep({
+      hor: data.res[resolution].horizontal,
+      ver: Math.floor(
+        dimensions.height / (dimensions.width / data.res[resolution].horizontal)
+      ),
+    });
+    data.rep = {
+      hor: rep.hor,
+      ver: rep.ver,
+    };
+    setAllPairs((rep.hor * rep.ver) / 2);
   }, [dimensions]);
 
   useEffect(() => {
@@ -39,6 +58,7 @@ export default function MemoryBoard(props) {
         sizeChange();
         resetCards();
         data.solvedPairs = 0;
+        setSolved(data.solvedPairs);
         currentColor.shift();
         newColors(size);
       }
@@ -55,14 +75,15 @@ export default function MemoryBoard(props) {
       if (currentColor[0][key].isSolved) solvedFields++;
     });
     data.solvedPairs = solvedFields / 2;
+    setSolved(data.solvedPairs);
     if (cardFields === solvedFields) finalWin();
   }, [firstCard, secondCard]);
 
   const finalWin = async () => {
     console.log("won");
     await delay(250);
-    setRender(7);
     data.won = true;
+    setRender(7);
   };
 
   const win = () => {
@@ -137,7 +158,7 @@ export default function MemoryBoard(props) {
   };
 
   const newColors = size => {
-    data.allPairs = size / 2;
+    //data.allPairs = size / 2;
     let colors = [];
     for (let a = 1; a < size / 2; a++) {
       colors.push([rgb(), rgb(), rgb()]);
@@ -172,7 +193,6 @@ export default function MemoryBoard(props) {
     singleColor.forEach((value, index) => {
       fieldColors[fields[(index + 1) * 2 - 1]] = {
         color: value,
-        colorId: index,
         id: fields[(index + 1) * 2 - 1],
         isSolved: false,
         isFlipped: false,
@@ -180,7 +200,6 @@ export default function MemoryBoard(props) {
       };
       fieldColors[fields[(index + 1) * 2 - 2]] = {
         color: value,
-        colorId: index,
         id: fields[(index + 1) * 2 - 2],
         isSolved: false,
         isFlipped: false,
@@ -198,14 +217,6 @@ export default function MemoryBoard(props) {
     return false;
   };
 
-  const getId = key => {
-    if (currentColor[0] != null) {
-      return currentColor[0][key].colorId ? currentColor[0][key].colorId : -1;
-    } else {
-      return -1;
-    }
-  };
-
   const getBackgroundColor = position => {
     if (currentColor[0] != null) {
       if (currentColor[0][position].isFlipped) {
@@ -218,60 +229,75 @@ export default function MemoryBoard(props) {
     }
   };
 
-  const isSmall = () => {
-    if (resolution === "xs" || resolution === "xxs" || resolution === "s")
-      return true;
-    return false;
+  const boardGrid = {
+    gridTemplateColumns: `repeat(${rep.hor},  calc(${
+      dimensions.width / horizontal
+    }px - 1rem))`,
+    gridTemplateRows: `repeat(${rep.ver},  calc(${
+      dimensions.width / horizontal
+    }px - 1rem))`,
   };
-
-  let boardDims = {
-    height: !isSmall()
-      ? dim.width > dim.height
-        ? dim.height
-        : dim.width
-      : dim.width > dim.height
-      ? dim.width
-      : dim.height,
-    width: !isSmall()
-      ? dim.width > dim.height
-        ? dim.height
-        : dim.width
-      : dim.width > dim.height
-      ? dim.width
-      : dim.height,
+  const backgroundDims = {
+    height: `${(rep.ver / rep.hor) * dimensions.width}px`,
   };
-
-  let boardGrid = {
-    gridTemplateColumns: `repeat(${horizontal}, calc(100% /${horizontal}))`,
-    gridTemplateRows: `repeat(${size / horizontal}, calc(100% /${
-      isSmall() ? size / horizontal : horizontal
-    }))`,
-  };
-
   return (
     <>
-      <div style={boardDims}>
-        {!data.won ? (
-          <div className={cx(style.wrapper)} style={boardGrid} {...rest}>
-            {sections.map(key => (
-              <MemoryCard
-                key={key}
-                position={key}
-                flipped={getFlipped(key)}
-                background={getFlipped(key) ? getBackgroundColor(key) : null}
-                onClick={() => cardClick(key)}
-                size={size}
-              >
-                {children}
-              </MemoryCard>
-            ))}
-          </div>
-        ) : (
-          <div className={style["win-container"]}>
-            <div className={style["win-header"]}>You won! 🎉</div>
-            <div className={style["win-text"]}>asdf</div>
-          </div>
-        )}
+      <div className={style["stats-container"]}>
+        <Statistics
+          hor={rep.hor}
+          ver={rep.ver}
+          clicks={clicks}
+          solved={solved}
+          resPrio={data.res[resolution].prio}
+        />
+      </div>
+      <ResizeListener
+        onResize={() => {
+          setDimensions({
+            width: ref.current ? ref.current.offsetWidth : 0,
+            height: ref.current ? ref.current.offsetHeight : 0,
+          });
+          data.clicks = 0;
+          setClicks(data.clicks);
+          setSolved(data.solvedPairs);
+          setAllPairs(data.allPairs);
+        }}
+      />
+
+      <div className={style["game-container"]} ref={ref}>
+        <div className={style["background-box"]} style={backgroundDims}>
+          {!data.won ? (
+            <div className={style["background-content"]}>
+              <div className={cx(style.wrapper)} style={boardGrid} {...rest}>
+                {sections.map(key => (
+                  <MemoryCard
+                    key={key}
+                    position={key}
+                    flipped={getFlipped(key)}
+                    background={
+                      getFlipped(key) ? getBackgroundColor(key) : null
+                    }
+                    onClick={() => {
+                      cardClick(key);
+                      setClicks(data.clicks);
+                      setSolved(data.solvedPairs);
+                      setAllPairs(data.allPairs);
+                    }}
+                    ver={rep.ver}
+                    hor={rep.hor}
+                  >
+                    {children}
+                  </MemoryCard>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className={style["win-container"]}>
+              <div className={style["win-header"]}>You won! 🎉</div>
+              <div className={style["win-text"]}>asdf</div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

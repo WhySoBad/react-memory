@@ -31,12 +31,12 @@
 
 .center.middle {
   width: auto;
-  flex: 1.5 1.5 auto;
-  margin: 0 2.5rem 2.5rem 2.5rem;
+  height: 100%;
+  //margin: 0 2.5rem;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+
   align-items: center;
   overflow-y: hidden;
 }
@@ -54,35 +54,15 @@
   margin: 0.5 1.5rem;
 }
 
-.board {
+.grid-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1 1 auto;
+}
+
+/*.board {
+  justify-content: center;
+  align-items: center;
   height: 100%;
   width: 100%;
-}
-
-.stats {
-  color: rgb(218, 214, 214);
-  display: flex;
-  flex-direction: row;
-  font-size: 1rem;
-  margin-right: 1.5rem;
-  padding: 0.25rem 1.5rem;
-  width: max-content;
-  background: rgba(0, 0, 0, 0.4);
-  font-weight: $fw-bold;
-  letter-spacing: 0.3rem;
-}
-
-.stats:nth-child(1) {
-  margin-left: 1rem;
-}
-.stats-container {
-  display: flex;
-  //justify-content: space-around;
-  float: left;
-  margin: 1rem;
-  height: fit-content;
-}
+}*/
