@@ -1,0 +1,23 @@
+@use '../../styles/config/' as *;
+
+.stats {
+  color: rgb(218, 214, 214);
+  display: flex;
+  font-size: 1rem;
+  margin-right: 1.5rem;
+  padding: 0.25rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  font-weight: $fw-bold;
+  letter-spacing: 0.3rem;
+}
+.stats:last-child {
+  margin-right: 0;
+}
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  float: left;
+  height: fit-content;
+}
