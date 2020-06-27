@@ -12,6 +12,7 @@ module.exports = {
         cssLoaderOptions: {
           camelCase: false,
         },
+        includePaths: [require("path").resolve(__dirname, "node_modules")],
       },
     },
     {

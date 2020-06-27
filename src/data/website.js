@@ -20,7 +20,6 @@ module.exports = {
     xl: { px: "1200px", prio: 5, horizontal: 10, type: "xl" },
     xxl: { px: "1600px", prio: 6, horizontal: 14, type: "xxl" },
   },
-  //Todo: Bug l, xl, xxl
   currentColor: [],
   clicks: 0,
   solvedPairs: 0,
