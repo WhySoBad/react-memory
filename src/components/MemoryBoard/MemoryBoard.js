@@ -3,17 +3,18 @@ import { rgb } from "random-color-gen";
 import cx from "classnames";
 import rc from "randomcolor";
 import { ResizeListener } from "react-resize-listener";
-import data, { currentColor } from "../../data/website";
+import data, { board, clicks } from "../../data/website";
 import style from "./MemoryBoard.module.scss";
 import MemoryCard from "../MemoryCard";
 import Statistics from "../Statistics";
-import { render } from "sass";
 
 export default function MemoryBoard(props) {
-  const [, setRender] = useState(null);
-  const [clicks, setClicks] = useState(data.clicks);
-  const [solved, setSolved] = useState(data.solvedPairs);
   const ref = useRef(null);
+  const [render, setRender] = useState(0);
+  const [stats, setStats] = useState({
+    clicks: 0,
+    solved: 0,
+  });
   const [rep, setRep] = useState({
     hor: 0,
     ver: 0,
@@ -22,8 +23,10 @@ export default function MemoryBoard(props) {
     width: ref.current ? ref.current.offsetWidth : 0,
     height: ref.current ? ref.current.offsetHeight : 0,
   });
-  const [firstCard, setFirstCard] = useState(null);
-  const [secondCard, setSecondCard] = useState(null);
+  const [cards, setCards] = useState({
+    1: null,
+    2: null,
+  });
   let { children, className, horizontal, resolution, ...rest } = props;
   let size = rep.hor * rep.ver;
   let sections = [];
@@ -39,6 +42,9 @@ export default function MemoryBoard(props) {
   }, [ref.current]);
 
   useEffect(() => {
+    if (data.won) {
+      resetBoard();
+    }
     setRep({
       hor: data.res[resolution].horizontal,
       ver: Math.floor(
@@ -52,48 +58,53 @@ export default function MemoryBoard(props) {
   }, [dimensions]);
 
   useEffect(() => {
-    if (currentColor[0]) {
-      if (Object.keys(currentColor[0]).length !== size) {
+    if (board) {
+      if (Object.keys(board).length !== size) {
         sizeChange();
         resetCards();
         data.solvedPairs = 0;
-        setSolved(data.solvedPairs);
-        currentColor.shift();
+        setStats({ ...stats, solved: data.solvedPairs });
+        Object.keys(board).forEach(key => delete board[key]);
         newColors(size);
       }
     }
   }, [size]);
 
   useEffect(() => {
-    if (!firstCard || !secondCard) return;
-    firstCard.color === secondCard.color ? win() : lose();
+    if (!cards[1] || !cards[2]) return;
+    cards[1].color === cards[2].color ? win() : lose();
     let solvedFields = 0;
     let cardFields = 0;
-    Object.keys(currentColor[0]).forEach(key => {
+    Object.keys(board).forEach(key => {
       cardFields++;
-      if (currentColor[0][key].isSolved) solvedFields++;
+      if (board[key].isSolved) solvedFields++;
     });
     data.solvedPairs = solvedFields / 2;
-    setSolved(data.solvedPairs);
+    setStats({ ...stats, solved: data.solvedPairs });
     if (cardFields === solvedFields) finalWin();
-  }, [firstCard, secondCard]);
+  }, [cards]);
 
   const finalWin = async () => {
-    console.log("won");
+    data.time.end = new Date().getTime();
     await delay(250);
+    console.log(
+      `Solved memory 🎉\n- ${clicks} Clicks\n- ${
+        rep.hor * rep.ver
+      } Fields\n- ${getTime()}`
+    );
     data.won = true;
-    setRender(1);
+    setRender(render - 10);
   };
 
   const win = () => {
-    setFirstCard({ isSolved: true });
-    setSecondCard({ isSolved: true });
-    setFirstCard({ canFlip: false });
-    setSecondCard({ canFlip: false });
-    currentColor[0][firstCard.id].isSolved = true;
-    currentColor[0][secondCard.id].isSolved = true;
-    currentColor[0][firstCard.id].canFlip = false;
-    currentColor[0][secondCard.id].canFlip = false;
+    setCards({
+      1: { isSolved: true, canFlip: false },
+      2: { isSolved: true, canFlip: false },
+    });
+    board[cards[1].id].isSolved = true;
+    board[cards[2].id].isSolved = true;
+    board[cards[1].id].canFlip = false;
+    board[cards[2].id].canFlip = false;
     resetCards();
   };
 
@@ -111,35 +122,59 @@ export default function MemoryBoard(props) {
   }
 
   const flipCards = async () => {
-    const IDs = [firstCard.id, secondCard.id];
+    const IDs = [cards[1].id, cards[2].id];
     await delay(650);
-    currentColor[0][IDs[0]].isFlipped = false;
-    currentColor[0][IDs[1]].isFlipped = false;
-    setRender(7);
+    board[IDs[0]].isFlipped = false;
+    board[IDs[1]].isFlipped = false;
+    setRender(render + 1);
+  };
+
+  const resetBoard = () => {
+    Object.keys(board).forEach(key => delete board[key]);
+    newColors();
+    setStats({
+      solved: 0,
+      clicks: 0,
+    });
+    setCards({
+      1: null,
+      2: null,
+    });
+    data.won = false;
+    setRender(render + 1);
   };
 
   const sizeChange = () => {
-    if (firstCard) currentColor[0][firstCard.id].isFlipped = false;
-    if (secondCard) currentColor[0][secondCard.id].isFlipped = false;
+    if (cards[1]) board[cards[1].id].isFlipped = false;
+    if (cards[2]) board[cards[2].id].isFlipped = false;
     data.clicks = 0;
-    data.win = false;
+    setRender(render - 1);
   };
 
   const resetCards = () => {
-    setFirstCard(null);
-    setSecondCard(null);
+    setCards({
+      1: null,
+      2: null,
+    });
   };
 
   const cardClick = position => {
-    if (!currentColor[0]) newColors(size);
-    let card = currentColor[0][position];
+    if (Object.keys(board).length === 0) newColors(size);
+    let card = board[position];
     if (card.isFlipped) return;
     if (!card.canFlip) return;
-    if (firstCard && firstCard.id === card.id) return;
-    if (secondCard && secondCard.id === card.id) return;
+    if (cards[1] && cards[1].id === card.id) return;
+    if (cards[2] && cards[2].id === card.id) return;
+    if (data.clicks === 0) {
+      data.time.start = new Date().getTime();
+      data.time.end = 0;
+    }
     data.clicks++;
+    finalWin();
     card.isFlipped = true;
-    firstCard ? setSecondCard(card) : setFirstCard(card);
+    cards[1]
+      ? setCards({ ...cards, 2: card })
+      : setCards({ ...cards, 1: card });
   };
 
   const newColors = size => {
@@ -190,24 +225,40 @@ export default function MemoryBoard(props) {
         canFlip: true,
       };
     });
-    currentColor.push(fieldColors);
-    return currentColor;
+    Object.assign(board, fieldColors);
+    return board;
   };
 
   const getFlipped = key => {
-    if (currentColor[0]) {
-      return currentColor[0][key] ? true : false;
+    if (board) {
+      return board[key] ? true : false;
     }
     return false;
   };
 
   const getBackgroundColor = position => {
-    if (currentColor[0]) {
-      if (currentColor[0][position].isFlipped) {
-        return currentColor[0][position].color;
+    if (board) {
+      if (board[position].isFlipped) {
+        return board[position].color;
       }
     }
     return "";
+  };
+
+  const getTime = () => {
+    const time = data.time.end - data.time.start;
+    let rest = 0;
+    let d = Math.floor(time / 86400000);
+    rest = time % 86400000;
+    let h = Math.floor(rest / 3600000);
+    rest %= 3600000;
+    let min = Math.floor(rest / 60000);
+    rest %= 60000;
+    let sec = Math.floor(rest / 1000);
+    let mil = rest % 1000;
+    return `${d === 0 ? "" : `${d}d `}${h === 0 ? "" : `${h}h `}${
+      min === 0 ? "" : `${min}m `
+    }${sec === 0 ? "" : `${sec}s `}${mil}ms`;
   };
 
   const boardGrid = {
@@ -220,15 +271,14 @@ export default function MemoryBoard(props) {
   };
   const backgroundDims = {
     height: `${(rep.ver / rep.hor) * dimensions.width}px`,
+    width: "100%",
   };
   return (
     <>
       <div className={style["stats-container"]}>
         <Statistics
-          hor={rep.hor}
-          ver={rep.ver}
-          clicks={clicks}
-          solved={solved}
+          dim={rep}
+          stats={{ clicks: stats.clicks, solved: stats.solved }}
           resPrio={data.res[resolution].prio}
         />
       </div>
@@ -239,8 +289,7 @@ export default function MemoryBoard(props) {
             height: ref.current ? ref.current.offsetHeight : 0,
           });
           data.clicks = 0;
-          setClicks(data.clicks);
-          setSolved(data.solvedPairs);
+          setStats({ clicks: data.clicks, solved: data.solvedPairs });
         }}
       />
 
@@ -259,8 +308,10 @@ export default function MemoryBoard(props) {
                     }
                     onClick={() => {
                       cardClick(key);
-                      setClicks(data.clicks);
-                      setSolved(data.solvedPairs);
+                      setStats({
+                        clicks: data.clicks,
+                        solved: data.solvedPairs,
+                      });
                     }}
                     ver={rep.ver}
                     hor={rep.hor}
@@ -272,8 +323,26 @@ export default function MemoryBoard(props) {
             </div>
           ) : (
             <div className={style["win-container"]}>
-              <div className={style["win-header"]}>You won! 🎉</div>
-              <div className={style["win-text"]}>asdf</div>
+              <div className={style["win-header"]}>Memory solved 🎉</div>
+              <div className={style["win-text"]}>
+                <div className={style["win-stats"]}>
+                  <span className={style["win-stats-prefix"]}>Clicks</span>
+                  {data.clicks}
+                </div>
+                <div className={style["win-stats"]}>
+                  <span className={style["win-stats-prefix"]}>Fields</span>
+                  {rep.hor * rep.ver}
+                </div>
+                <div className={style["win-stats"]}>
+                  <span className={style["win-stats-prefix"]}>Time</span>
+                  {getTime()}
+                </div>
+              </div>
+              <div className={style["win-button"]}>
+                <button className={style["button"]} onClick={resetBoard}>
+                  Play again
+                </button>
+              </div>
             </div>
           )}
         </div>

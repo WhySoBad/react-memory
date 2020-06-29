@@ -20,7 +20,11 @@ module.exports = {
     xl: { px: "1200px", prio: 5, horizontal: 10, type: "xl" },
     xxl: { px: "1600px", prio: 6, horizontal: 14, type: "xxl" },
   },
-  currentColor: [],
+  board: {},
+  time: {
+    start: 0,
+    end: 0,
+  },
   clicks: 0,
   solvedPairs: 0,
   allPairs: 0,

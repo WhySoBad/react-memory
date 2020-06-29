@@ -14,10 +14,14 @@
 }
 .stats:last-child {
   margin-right: 0;
+  border-radius: 0 20px 20px 0;
+}
+.stats:first-child {
+  border-radius: 20px 0 0 20px;
 }
 .stats-container {
   display: flex;
   justify-content: space-between;
-  float: left;
   height: fit-content;
+  float: left;
 }
