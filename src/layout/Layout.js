@@ -4,12 +4,12 @@ import MainScreen from "../components/MainScreen";
 import "../styles/main.scss"; //Global stylesheet
 
 const Layout = props => {
-  const { children } = props;
+  const { children, ...rest } = props;
   return (
     <>
       <div className={style.content}>
         <main className={style.main}>
-          <MainScreen /> {children}
+          <MainScreen {...rest} /> {children}
         </main>
       </div>
     </>
