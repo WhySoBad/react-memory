@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { rgb } from "random-color-gen";
 import cx from "classnames";
-import rc from "randomcolor";
+import rhc from "random-hex-code-gen";
+import { Button } from "react-qol";
 import { ResizeListener } from "react-resize-listener";
 import data, { board, clicks } from "../../data/website";
 import style from "./MemoryBoard.module.scss";
@@ -181,25 +182,17 @@ export default function MemoryBoard(props) {
     for (let a = 1; a < size / 2; a++) {
       colors.push([rgb(), rgb(), rgb()]);
     }
-    let singleColor = [
-      ...rc({
-        luminosity: "light",
-        format: "rgb",
-        count: size / 2,
-      }),
-    ];
-    let gradient = [];
-
-    colors.forEach((color, index) => {
-      let currColor = [...colors[index]];
-      let startColor = `rgb(${currColor[0][0]}, ${currColor[0][1]}, ${currColor[0][2]})`;
-      let finishColor = `rgb(${currColor[2][0]}, ${currColor[2][1]}, ${currColor[2][2]})`;
-
-      gradient.push(
-        `linear-gradient(to right top, ${startColor}, ${finishColor})`
-      );
-    });
-
+    //let isSpecial = Math.floor(Math.random() * 100) + 1 < 30; //coming soon
+    let isSpecial = false;
+    let repeat = isSpecial ? size / 2 - 1 : size / 2;
+    let singleColor = [];
+    /*if (isSpecial)
+      singleColor.push(
+        ``
+      );*/
+    for (let index = 0; index < repeat; index++) {
+      singleColor.push(rhc.generate());
+    }
     let fields = [];
 
     for (let i = 0; i < size; i++) {
@@ -338,9 +331,9 @@ export default function MemoryBoard(props) {
                 </div>
               </div>
               <div className={style["win-button"]}>
-                <button className={style["button"]} onClick={resetBoard}>
+                <Button className={style["button"]} onClick={resetBoard}>
                   Play again
-                </button>
+                </Button>
               </div>
             </div>
           )}

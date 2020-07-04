@@ -34,6 +34,7 @@ export default function MemoryCard(props) {
             ? {
                 background: background,
                 opacity: "1",
+                boxShadow: "0px 0px 5px 1px rgba(0, 0, 0, 0.55)",
               }
             : {}
         }

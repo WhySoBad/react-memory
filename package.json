@@ -20,6 +20,7 @@
     "gatsby-transformer-sharp": "^2.5.2",
     "prop-types": "^15.7.2",
     "random-color-gen": "^1.0.0",
+    "random-hex-code-gen": "0.0.1",
     "randomcolor": "^0.5.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
