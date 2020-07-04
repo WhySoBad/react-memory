@@ -4,7 +4,7 @@ import Layout from "../layout/Layout";
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Home" />
+    <SEO title="Memory" />
   </Layout>
 );
 

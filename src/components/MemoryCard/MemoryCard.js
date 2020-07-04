@@ -1,5 +1,6 @@
 import React from "react";
 import cx from "classnames";
+import { Square } from "react-qol";
 import style from "./MemoryCard.module.scss";
 
 export default function MemoryCard(props) {
@@ -25,19 +26,19 @@ export default function MemoryCard(props) {
     corner = "top-right";
   }
   return (
-    <div className={style.square}>
+    <Square>
       <div
         className={cx(style.card, style[corner], className)}
         style={
           background
             ? {
-                backgroundColor: background,
+                background: background,
                 opacity: "1",
               }
             : {}
         }
         {...rest}
-      ></div>
-    </div>
+      />
+    </Square>
   );
 }

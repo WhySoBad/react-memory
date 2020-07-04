@@ -170,7 +170,6 @@ export default function MemoryBoard(props) {
       data.time.end = 0;
     }
     data.clicks++;
-    finalWin();
     card.isFlipped = true;
     cards[1]
       ? setCards({ ...cards, 2: card })

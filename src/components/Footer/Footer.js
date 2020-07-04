@@ -1,11 +1,13 @@
 import React from "react";
 import cx from "classnames";
 import style from "./Footer.module.scss";
-import Icon from "../Icon";
+import { Icon, addIcon } from "react-qol";
 import data from "../../data/website";
+import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 
 const Footer = props => {
   const { className, ...rest } = props;
+  addIcon("Logo", Logo);
   return (
     <footer className={cx(className, style.footer)} {...rest}>
       <div className={style["footer-container"]}>

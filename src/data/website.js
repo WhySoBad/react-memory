@@ -2,7 +2,7 @@ module.exports = {
   siteUrl: "Unknown",
 
   siteTitle: "memory.js",
-  siteTitleTemplate: "%s | memory.js",
+  siteTitleTemplate: "%s",
   siteAuthor: "_WhySoBad",
   siteDescription: "Unknown",
   social: {
