@@ -4,6 +4,8 @@
 
 ## Play
 
+![Game](https://i.imgur.com/wByPfOk.png)
+
 ### Procedure
 
 The website will generate a field with a couple of squared cards. When a card is clicked it switch the color. There are always two cards with the same color.

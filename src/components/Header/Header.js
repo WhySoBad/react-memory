@@ -12,7 +12,7 @@ const Header = props => {
     <header className={cx(className, style.header)} {...rest}>
       <div className={style["header-container"]}>
         <div className={style.left}></div>
-        <div className={style.middle}>Memory</div>
+        <div className={style.middle}></div>
         <div className={style.right}>
           <Link href={data.social.github.link}>
             <Icon className={cx(style.icon, style.github)} name={"github"} />
