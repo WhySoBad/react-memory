@@ -2,12 +2,9 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import config from "../data/website";
 
-function SEO({ description, meta, title }) {
-  const metaDescription = description ? description : config.siteDescription;
-  const metaTitle = title
-    ? config.siteTitleTemplate.replace("%s", title)
-    : title;
-
+function SEO({ title }) {
+  const metaDescription = config.siteDescription;
+  const metaTitle = config.siteTitleTemplate.replace("%s", title);
   return (
     <Helmet defer={false}>
       <title>{metaTitle}</title>
