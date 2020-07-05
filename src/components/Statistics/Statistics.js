@@ -16,9 +16,9 @@ const Statistics = props => {
     <div
       className={style["stats-container"]}
       style={
-        resPrio > 0
+        resPrio > 1
           ? { width: "fit-content", padding: "0.5rem 2rem" }
-          : { width: "100%", padding: "0.5rem 0.5rem" }
+          : { width: "100%", padding: "0.5rem 0.5rem", alignItems: "center" }
       }
     >
       <div className={style.stats}>

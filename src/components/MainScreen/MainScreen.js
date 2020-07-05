@@ -11,6 +11,7 @@ export default function MainScreen(props) {
   const { children } = props;
 
   const queries = {
+    xxxs: useMediaQuery(`only screen and (min-width: ${data.res.xxxs.px})`),
     xxs: useMediaQuery(`only screen and (min-width: ${data.res.xxs.px})`),
     xs: useMediaQuery(`only screen and (min-width: ${data.res.xs.px})`),
     s: useMediaQuery(`only screen and (min-width: ${data.res.s.px})`),
@@ -42,13 +43,22 @@ export default function MainScreen(props) {
         <section className={style.container}>
           <div className={style.undercontainer}>
             <main className={cx(style.middle, style.center)}>
-              <MemoryBoard
-                className={style["grid-container"]}
-                resolution={data.res[getFields()].type}
-                horizontal={data.res[getFields()].horizontal}
-              >
-                {children}
-              </MemoryBoard>
+              {getFields() !== "xxxs" ? (
+                <MemoryBoard
+                  className={style["grid-container"]}
+                  resolution={data.res[getFields()].type}
+                  horizontal={data.res[getFields()].horizontal}
+                >
+                  {children}
+                </MemoryBoard>
+              ) : (
+                <div className={style.error}>
+                  <div className={style["error-text"]}>
+                    <h1>TOO SMALL</h1>
+                    <p>Your device width is too small for this application.</p>
+                  </div>
+                </div>
+              )}
             </main>
           </div>
         </section>
