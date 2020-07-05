@@ -1,14 +1,18 @@
 module.exports = {
-  siteUrl: "Unknown",
+  siteUrl: "https://reactmemory.netlify.app/",
 
-  siteTitle: "memory.js",
+  siteTitle: "Memory",
   siteTitleTemplate: "%s",
   siteAuthor: "_WhySoBad",
-  siteDescription: "Unknown",
+  siteDescription: "A simple memory game created with react.",
   social: {
     github: {
       name: "WhySoBad",
       link: "https://github.com/WhySoBad",
+    },
+    twitter: {
+      name: "@WhySoBad7",
+      link: "https://twitter.com/WhySoBad7",
     },
   },
   res: {

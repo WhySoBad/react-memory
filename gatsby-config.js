@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `memory.js`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
+    title: `Memory`,
+    description: `A simple memory game created with react.`,
     author: `WhySoBad`,
   },
   plugins: [

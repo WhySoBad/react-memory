@@ -1,6 +1,6 @@
 # react-memory
 
-> A simple memory game created with react.
+> A simple ![memory](https://reactmemory.netlify.app/) game created with react.
 
 ## Play
 

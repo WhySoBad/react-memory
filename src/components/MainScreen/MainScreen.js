@@ -31,7 +31,7 @@ export default function MainScreen(props) {
         }
       }
     });
-    if (resolution === "") return "xxs";
+    if (resolution === "") return "xxl";
     return resolution;
   };
 
