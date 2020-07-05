@@ -2,6 +2,10 @@
 
 > A simple [memory](https://reactmemory.netlify.app/) game created with react.
 
+## Status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/dd8f64e8-7c29-4225-96a2-c2fab64d10af/deploy-status)](https://app.netlify.com/sites/reactmemory/deploys)
+
 ## Play
 
 ![Game](https://i.imgur.com/wByPfOk.png)
