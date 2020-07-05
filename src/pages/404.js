@@ -1,6 +1,6 @@
 import React from "react";
 import Container from "../components/Container404";
-import SEO from "../components/SEO";
+import SEO from "../components/seo";
 
 const NotFoundPage = () => (
   <Container>

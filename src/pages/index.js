@@ -1,5 +1,5 @@
 import React from "react";
-import SEO from "../components/SEO";
+import SEO from "../components/seo";
 import Layout from "../layout/layout";
 
 const IndexPage = () => (
