@@ -2,6 +2,7 @@ module.exports = {
   siteUrl: "https://reactmemory.netlify.app/",
 
   siteTitle: "Memory",
+  siteName: "reactmemory",
   siteTitleTemplate: "%s",
   siteAuthor: "_WhySoBad",
   siteDescription: "A simple memory game created with react.",
